@@ -3441,7 +3441,7 @@ int CombineParallel(char *model, int file)
    }
    HashKill(&devdict);
    if (dcnt > 0) {
-      Fprintf(stdout, "Class %s:  Merged %d devices.\n", model, dcnt);
+      Fprintf(stdout, "Class %s(%d):  Merged %d devices.\n", model, file, dcnt);
    }
    FREE(nodecount);
    return dcnt;

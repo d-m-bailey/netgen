@@ -3125,7 +3125,7 @@ int FirstElementPass(struct Element *E, int noflat, int dolist)
   ostr = CALLOC(right_col_end + 2, sizeof(char));
 
   if (Debug == 0) {
-     Fprintf(stdout, "\nSubcircuit summary:\n");
+     Fprintf(stdout, "Subcircuit summary:\n");
      *(ostr + left_col_end) =  '|';
      *(ostr + right_col_end) = '\n';
      *(ostr + right_col_end + 1) = '\0';
@@ -3736,6 +3736,8 @@ void CreateTwoLists(char *name1, int file1, char *name2, int file2, int dolist)
 
     ResetState();
 
+    Fprintf(stdout, "\n");  // new line before circuit diagnostics in log file
+    Printf("\n");  // new line before circuit diagnostics in screen display
     /* print preliminary statistics */
     Printf("Contents of circuit 1:  ");
     DescribeInstance(name1, file1);
@@ -7219,8 +7221,10 @@ int MatchPins(struct nlist *tc1, struct nlist *tc2, int dolist)
 			      for (m = left_col_end + 1; m < right_col_end; m++) *(ostr + m) = ' ';
 			      snprintf(ostr, left_col_end, "%s", obn->name);
 			      if ((*matchfunc)(obn->name, obp->name))
+			         // MatchPins condition 1: portA = portA port name match
 			         snprintf(ostr + left_col_end + 1, left_col_end, "%s", obp->name);
 			      else {
+			         // MatchPins condition 2: portA = portB port name mismatch
 			         snprintf(ostr + left_col_end + 1, left_col_end, "%s **Mismatch**", obp->name);
 				 /* Pins with different names are on different nets,
 				  * so this should trigger an error return code.
@@ -7250,7 +7254,7 @@ int MatchPins(struct nlist *tc1, struct nlist *tc2, int dolist)
 			   break;
 			}
 		     }
-		     if (ob2 == NULL) {
+		     if (ob2 == NULL) {  // matched to non-port
 			if (Debug == 0) {
 			   // If first cell has no pins but 2nd cell
 			   // does, then "no matching pin" entries will
@@ -7261,7 +7265,8 @@ int MatchPins(struct nlist *tc1, struct nlist *tc2, int dolist)
 			      for (m = 0; m < left_col_end; m++) *(ostr + m) = ' ';
 			      for (m = left_col_end + 1; m < right_col_end; m++) *(ostr + m) = ' ';
 			      snprintf(ostr, 32, "%s", obn->name);
-			      snprintf(ostr + left_col_end + 1, left_col_end, "(no matching pin)");
+		              // MatchPins condition 3: portA = netA port missing in tc2 -> create proxy port (TODO)
+		              snprintf(ostr + left_col_end + 1, left_col_end, "%s (not a pin)", obp->name);
 			      for (m = 0; m < right_col_end + 1; m++)
 				 if (*(ostr + m) == '\0') *(ostr + m) = ' ';
 			      Fprintf(stdout, ostr);
@@ -7306,6 +7311,7 @@ int MatchPins(struct nlist *tc1, struct nlist *tc2, int dolist)
 
 	       if (ob1 == NULL) {
 		  if (Debug == 0) {
+		     // MatchPins condition 4: netA = portA port missing in tc1 -> create proxy port (TODO)
 		     for (m = 0; m < left_col_end; m++) *(ostr + m) = ' ';
 		     for (m = left_col_end + 1; m < right_col_end; m++) *(ostr + m) = ' ';
 		     snprintf(ostr, left_col_end, "%s", obn->name);
@@ -7433,6 +7439,7 @@ int MatchPins(struct nlist *tc1, struct nlist *tc2, int dolist)
 
 	 if (Debug == 0) {
 	    // See above for reverse case
+	    // MatchPins condition 5: none = portA: disconnected port missing in tc1 -> create proxy port (TODO)
 	    if (strcmp(ob2->name, "(no pins)")) {
 	       for (m = 0; m < left_col_end; m++) *(ostr + m) = ' ';
 	       for (m = left_col_end + 1; m < right_col_end; m++) *(ostr + m) = ' ';
@@ -7561,6 +7568,7 @@ int MatchPins(struct nlist *tc1, struct nlist *tc2, int dolist)
 
 	 /* Add a proxy pin to tc2 */
          obn = (struct objlist *)CALLOC(1, sizeof(struct objlist));
+	 // MatchPins condition 6: portA = none: disconnected port missing in tc2 -> create proxy port (TODO)
 	 if (ob1 == NULL) {
 	    obn->name = (char *)MALLOC(15);
             sprintf(obn->name, "proxy%d", rand() & 0x3ffffff);
