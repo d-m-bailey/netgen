@@ -3445,7 +3445,9 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
          tcsub = NULL;
          if (ob->type == FIRSTPIN) {
 	    /* First check if there is a class equivalent */
+	    Printf("DEBUG: ob before %p\n", (void *) ob);
 	    tcsub = LookupCellFile(ob->model.class, tc->file);
+	    Printf("DEBUG: ob after %p\n", (void *) ob);
 	    if (!tcsub || (tcsub->class != CLASS_SUBCKT)) continue;
 	    else if (tcsub == tc) continue;
 	    if (FlattenUnmatched(tcsub, tc->name, stoplevel, loclevel + 1)) {
