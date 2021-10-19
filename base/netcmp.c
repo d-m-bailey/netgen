@@ -3439,7 +3439,7 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
    if (tc->cell == NULL) return 0;
 
    changed = 1;
-   void * last_ob = tc->cell;
+   struct objlist * last_ob = tc->cell;
    while (changed) {
       changed = 0;
       for (ob = tc->cell; ob != NULL; ob = ob->next) {
@@ -3451,12 +3451,12 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
 	    if (!tcsub || (tcsub->class != CLASS_SUBCKT)) continue;
 	    else if (tcsub == tc) continue;
 	    if (FlattenUnmatched(tcsub, tc->name, stoplevel, loclevel + 1)) {
-	       assert(last_ob == ob);
+	       if (last_ob != ob) Printf("DEBUG: ob overwrite %s\n", last_ob->name);
 	       changed = 1;
 	       break;
 	    }
 	 }
-	 assert(last_ob == ob);
+	 if (last_ob != ob) Printf("DEBUG: ob overwrite %s\n", last_ob->name);
       }
    }
 
