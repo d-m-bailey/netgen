@@ -3426,7 +3426,7 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
    struct objlist *ob;
    int changed = 0;
 
-   Fprintf(stdout, "DEBUG: FlattenUnmatched start %\n", tc->name);
+   Fprintf(stdout, "DEBUG: FlattenUnmatched start %s %d\n", tc->name, loclevel);
    if (loclevel == stoplevel && !(tc->flags & CELL_MATCHED)) {
       ClearDumpedList();
       if (Debug == TRUE) Fprintf(stdout, "Level %d ", loclevel);
@@ -3463,7 +3463,7 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
 	 if (last_ob != ob) Printf("DEBUG: ob overwrite %s\n", last_ob->name);
       }
    }
-   Fprintf(stdout, "DEBUG: FlattenUnmatched done\n");
+   Fprintf(stdout, "DEBUG: FlattenUnmatched done %d\n", loclevel);
 
    return 0;
 }
