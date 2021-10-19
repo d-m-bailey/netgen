@@ -97,7 +97,10 @@ void Fprintf(FILE *f, char *format, ...)
 
   va_start(ap, format);
   if (!NoOutput) tcl_vprintf(f, format, ap);
-  if (LoggingFile != NULL) vfprintf(LoggingFile, format, ap);
+  if (LoggingFile != NULL) {
+    vfprintf(LoggingFile, format, ap);
+    fflush(LoggingFile);
+  }
   va_end(ap);
 }
 
