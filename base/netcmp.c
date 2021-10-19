@@ -3439,22 +3439,24 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
    if (tc->cell == NULL) return 0;
 
    changed = 1;
+   void * last_ob = tc->cell;
    while (changed) {
       changed = 0;
       for (ob = tc->cell; ob != NULL; ob = ob->next) {
+         last_ob = ob;
          tcsub = NULL;
          if (ob->type == FIRSTPIN) {
 	    /* First check if there is a class equivalent */
-	    Printf("DEBUG: ob before %p\n", (void *) ob);
 	    tcsub = LookupCellFile(ob->model.class, tc->file);
-	    Printf("DEBUG: ob after %p\n", (void *) ob);
 	    if (!tcsub || (tcsub->class != CLASS_SUBCKT)) continue;
 	    else if (tcsub == tc) continue;
 	    if (FlattenUnmatched(tcsub, tc->name, stoplevel, loclevel + 1)) {
+	       assert(last_ob == ob);
 	       changed = 1;
 	       break;
 	    }
 	 }
+	 assert(last_ob == ob);
       }
    }
 
