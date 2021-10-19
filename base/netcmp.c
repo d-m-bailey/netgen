@@ -3467,7 +3467,7 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
 	    }
 	 }
 	 if (next_ob != ob->next) {
-	    Fprintf(stdout, "DEBUG2:\n");
+	    Fprintf(stdout, "DEBUG2: %p %p %d\n", (void *) next_ob, (void *) ob->next, ob->type);
 	    Fprintf(stdout, "DEBUG2: ob overwrite %s\n", ob->model.class);
 	 }
       }
