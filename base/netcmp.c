@@ -3431,6 +3431,8 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
       if (Debug == TRUE) Fprintf(stdout, "Level %d ", loclevel);
       Fprintf(stdout, "Flattening unmatched subcell %s in circuit %s (%d)",
 				tc->name, parent, tc->file);
+      fflush(stdout);
+      fflush(LoggingFile);
       changed = flattenInstancesOf(parent, tc->file, tc->name);
       Fprintf(stdout, "(%d instance%s)\n", changed, ((changed == 1) ? "" : "s"));
       return 1;
