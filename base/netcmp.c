@@ -3424,7 +3424,7 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
 {
    struct nlist *tcsub;
    struct objlist *ob;
-   // int changed = 0;
+   int changed = 0;
 
    Fprintf(stdout, "DEBUG: FlattenUnmatched start %p\n", (void *) tc->cell);
    Fprintf(stdout, "DEBUG: FlattenUnmatched start %s %d\n", tc->name, loclevel);
@@ -3435,8 +3435,7 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
 				tc->name, parent, tc->file);
       fflush(stdout);
       fflush(LoggingFile);
-      // changed = flattenInstancesOf(parent, tc->file, tc->name);
-      flattenInstancesOf(parent, tc->file, tc->name);
+      changed = flattenInstancesOf(parent, tc->file, tc->name);
       Fprintf(stdout, "(%d instance%s)\n", changed, ((changed == 1) ? "" : "s"));
       return 1;
    }
