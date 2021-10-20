@@ -3424,7 +3424,7 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
 {
    struct nlist *tcsub;
    struct objlist *ob;
-   int changed = 0;
+   // int changed = 0;
 
    Fprintf(stdout, "DEBUG: FlattenUnmatched start %p\n", (void *) tc->cell);
    Fprintf(stdout, "DEBUG: FlattenUnmatched start %s %d\n", tc->name, loclevel);
@@ -3435,7 +3435,8 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
 				tc->name, parent, tc->file);
       fflush(stdout);
       fflush(LoggingFile);
-      changed = flattenInstancesOf(parent, tc->file, tc->name);
+      // changed = flattenInstancesOf(parent, tc->file, tc->name);
+      flattenInstancesOf(parent, tc->file, tc->name);
       Fprintf(stdout, "(%d instance%s)\n", changed, ((changed == 1) ? "" : "s"));
       return 1;
    }
@@ -3443,10 +3444,10 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
    if (tc->cell == NULL) return 0;
 
    Fprintf(stdout, "DEBUG: FlattenUnmatched recursing\n");
-   changed = 1;
+   //changed = 1;
    struct objlist * next_ob = tc->cell;
-   while (changed) {
-      changed = 0;
+   //while (changed) {
+      //changed = 0;
       for (ob = tc->cell; ob != NULL; ob = ob->next) {
          next_ob = ob->next;
          tcsub = NULL;
@@ -3456,22 +3457,18 @@ int FlattenUnmatched(struct nlist *tc, char *parent, int stoplevel, int loclevel
 	    if (!tcsub || (tcsub->class != CLASS_SUBCKT)) continue;
 	    else if (tcsub == tc) continue;
 	    if (FlattenUnmatched(tcsub, tc->name, stoplevel, loclevel + 1)) {
-	    /*
-	       if (next_ob != ob->next) {
-	       	Fprintf(stdout, "DEBUG1: %p %p %d\n", (void *) next_ob, (void *) ob->next, ob->type);
-	       	Fprintf(stdout, "DEBUG1: ob overwrite %s\n", ob->model.class);
-	       }
-	       */
-	       changed = 1;
-	       break;
+	       //changed = 1;
+	       return 1;
+	       //break;
 	    }
 	 }
 	 if (next_ob != ob->next) {
-	    Fprintf(stdout, "DEBUG2: %p %p %d\n", (void *) next_ob, (void *) ob->next, ob->type);
+	    Fprintf(stdout, "DEBUG2: cell %s %s\n", tc->name, tcsub->name);
+	    Fprintf(stdout, "DEBUG2: %p %p %p %d\n", (void *) next_ob, (void *) ob, (void *) ob->next, ob->type);
 	    Fprintf(stdout, "DEBUG2: ob overwrite %s\n", ob->model.class);
 	 }
       }
-   }
+   //}
    Fprintf(stdout, "DEBUG: FlattenUnmatched done %d\n", loclevel);
 
    return 0;
