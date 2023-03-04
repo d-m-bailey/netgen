@@ -7102,7 +7102,9 @@ int EquivalenceClasses(char *name1, int file1, char *name2, int file2)
       /* conflicting names exist, then alter the classhash to make it	*/
       /* unique.  In the case of duplicate cells, don't do this.	*/
 
-      /*
+      /* This code has the side effect of invalidating any previous equivalencies.
+       * This is currently the only place need_new_seed is set,
+       * so the next if block will never be executed.
       if (!(tp->flags & CELL_DUPLICATE) && !(tp2->flags & CELL_DUPLICATE) &&
 			!(*matchfunc)(name1, name2)) {
 	 tpx = LookupCellFile(name1, file2);
