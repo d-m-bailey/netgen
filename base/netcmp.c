@@ -7102,6 +7102,7 @@ int EquivalenceClasses(char *name1, int file1, char *name2, int file2)
       /* conflicting names exist, then alter the classhash to make it	*/
       /* unique.  In the case of duplicate cells, don't do this.	*/
 
+      /*
       if (!(tp->flags & CELL_DUPLICATE) && !(tp2->flags & CELL_DUPLICATE) &&
 			!(*matchfunc)(name1, name2)) {
 	 tpx = LookupCellFile(name1, file2);
@@ -7109,6 +7110,7 @@ int EquivalenceClasses(char *name1, int file1, char *name2, int file2)
 	 tpx = LookupCellFile(name2, file1);
 	 if (tpx != NULL) need_new_seed = 1;
       }
+      */
 
       /* Now make the classhash values the same so that these cells	*/
       /* are indistinguishable by the netlist comparator.		*/
